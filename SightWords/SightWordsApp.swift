@@ -2,13 +2,17 @@
 
 import SwiftUI
 
+import AVFoundation
+
 @main
 struct SightWordsApp: App {
-    //zzz TODO: have a database of words
+    //zzz TODO: have a database of words to start?
+    
+    let synthesizer = AVSpeechSynthesizer()
     
     var body: some Scene {
         WindowGroup {
-            ContentView(listOfWords: [])
+            ContentView(synthesizer: synthesizer, listOfWords: [], wordsOnCanvas: [])
         }
     }
 }

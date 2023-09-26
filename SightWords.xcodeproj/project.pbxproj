@@ -145,6 +145,8 @@
 			dependencies = (
 			);
 			name = SightWords;
+			packageProductDependencies = (
+			);
 			productName = SightWords;
 			productReference = DA550AFB2AC33663000B8635 /* SightWords.app */;
 			productType = "com.apple.product-type.application";
@@ -217,6 +219,8 @@
 				Base,
 			);
 			mainGroup = DA550AF22AC33663000B8635;
+			packageReferences = (
+			);
 			productRefGroup = DA550AFC2AC33663000B8635 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
