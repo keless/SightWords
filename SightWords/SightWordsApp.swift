@@ -6,13 +6,12 @@ import AVFoundation
 
 @main
 struct SightWordsApp: App {
-    //zzz TODO: have a database of words to start?
-    
+
     let synthesizer = AVSpeechSynthesizer()
     
     var body: some Scene {
         WindowGroup {
-            ContentView(synthesizer: synthesizer, listOfWords: [], wordsOnCanvas: [])
+            ContentView(synthesizer: synthesizer, wordsOnCanvas: [])
         }
     }
 }

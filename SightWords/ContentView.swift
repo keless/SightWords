@@ -7,70 +7,47 @@ import AVFoundation
 struct ContentView: View {
     
     let synthesizer: AVSpeechSynthesizer
-    
-    @State var listOfWords: [String]
-    
+        
     @State var wordsOnCanvas: [String]
         
     var body: some View {
         HStack {
-
-            HexGrid(synthesizer: synthesizer, words: wordsOnCanvas)
-                .frame(maxWidth: .infinity, alignment: .leading)
-               
-            /*
             VStack {
-                ForEach(wordsOnCanvas, id: \.self) { canvasWord in
-                    WordCircle(wordText: canvasWord)
-                }
-            }.frame(maxWidth: .infinity, alignment: .leading)*/
-            
-            VStack {
-                
-                List {
-                    ForEach(listOfWords, id: \.self) { item in
-                        WordList(wordText: item).frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                    }
-                }.frame(width: 300, alignment: .trailing)
+                HexGrid(synthesizer: synthesizer, words: wordsOnCanvas)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+    
                 HStack {
-                    Button(action: {
-                        doTestWords()
-                    }, label: {
-                        Text("Test Words")
-                    })
                     Button(action: {
                         doAddWord()
                     }, label: {
                         Text("Add Word")
-                    })
+                    }).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/).buttonStyle(.bordered)
                     Button(action: {
                         doClearWords()
                     }, label: {
                         Text("Clear Words")
-                    })
-                }
+                    }).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/).buttonStyle(.bordered)
+                }.frame(maxWidth: .infinity)
             }
 
         }
         .padding()
     }
-
-    func doTestWords() {
-        wordsOnCanvas = listOfWords
-    }
     
     func doAddWord() {
         
         alertTextField(title: "Add Word", message: "Add a sight word to the list.", hintText: "word", primaryButtonTitle: "Add", secondaryButtonTitle: "Cancel", primaryAction: { wordStr in
-            listOfWords.append(wordStr)
+            
+            //TODO: if word already exists in wordsOnCanvas, dont add it again?
+            
+            wordsOnCanvas.append(wordStr)
         }, secondaryAction: {
             // meh
         })
     }
     
     func doClearWords() {
-        listOfWords = []
-        //canvasWords = []
+        wordsOnCanvas = []
     }
     
     func alertTextField(title: String, message: String, hintText: String, primaryButtonTitle: String, secondaryButtonTitle: String, primaryAction: @escaping (String)->(), secondaryAction: @escaping ()->()) {
@@ -140,7 +117,7 @@ struct WordCircle: View, Hashable {
                     .background(Color.gray)
                     .clipShape(Circle())
             }.buttonStyle(PlainButtonStyle())
-        }.frame(width: 250, height: 250)
+        }.frame(width: 225, height: 225)
     }
     
     let synthesizer: AVSpeechSynthesizer
@@ -170,12 +147,13 @@ struct HexGrid: View {
     var body: some View {
         let gridItems = Array(repeating: GridItem(.fixed(hexagonWidth), spacing: spacing), count: cols)
 
-        ScrollView(.vertical) {
+        //ScrollView(.vertical) {
+        GeometryReader { geometryProxy in
             LazyVGrid(columns: gridItems, spacing: spacing) {
                 ForEach(words, id: \.self) { word in
                     let idx = words.firstIndex(of: word)
                     WordCircle(wordText: word, synthesizer: synthesizer)
-                        .frame(width: cellSize.width, height: cellSize.height)
+                        .frame(width: cellSize.width, height: cellSize.height * 2/3)
                         .offset(x: isEvenRow(idx) ? 0 : -1 * (hexagonWidth / 2 + (spacing/2)))
                 }
             }
@@ -189,5 +167,5 @@ struct HexGrid: View {
 }
 
 #Preview {
-    ContentView(synthesizer: AVSpeechSynthesizer(), listOfWords: ["bed", "mom", "the", "by", "bus", "big", "mat"], wordsOnCanvas: [])
+    ContentView(synthesizer: AVSpeechSynthesizer(), wordsOnCanvas: ["bed", "mom", "the", "by", "bus", "big", "mat"])
 }
